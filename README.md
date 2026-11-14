@@ -29,6 +29,6 @@ Open `http://127.0.0.1:8000/`. Sign in with the staff account created above. SQL
 
 ## Deploy to Render
 
-The included `render.yaml` creates an independent web service and PostgreSQL database with auto-deploy enabled. Connect this repository as a new Render Blueprint; do not attach it to the existing student-record service.
+The included `render.yaml` creates an independent free web service with auto-deploy enabled. Since a Render workspace can have only one active free PostgreSQL database, this free setup uses SQLite on the service filesystem. SQLite data on Render is not durable and can be lost when the service restarts or redeploys. Use PostgreSQL for persistent records.
 
-To provision the first staff account, temporarily add `BOOTSTRAP_ADMIN_USERNAME` and `BOOTSTRAP_ADMIN_PASSWORD` in the new Render service's environment, then deploy. The build command creates the account only if it does not already exist. Remove both variables after the successful deployment and redeploy to avoid retaining the one-time password in service configuration.
+Connect this repository as a new Render Blueprint; do not attach it to the existing student-record service. To provision a staff account on the free SQLite deployment, set `BOOTSTRAP_ADMIN_USERNAME` and `BOOTSTRAP_ADMIN_PASSWORD` in the Render environment before deploying. The build command creates the account only if it does not already exist. Because the database is rebuilt from scratch on redeploy, keep those values in Render (never in Git) if you need the staff account recreated after a redeploy. For persistent records and safer one-time credential handling, use PostgreSQL.
